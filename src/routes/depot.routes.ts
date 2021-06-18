@@ -26,7 +26,6 @@ import {
  *           type: string
  *           description: The depot name
  *       example:
- *         id: 4
  *         name: depot Dakar
  */
 
@@ -160,6 +159,6 @@ router.put("/depot/:id", updateDepot);
  *       404:
  *         description: The depot was not found
  */
-router.delete("/depot/:id", deleteDepot);
+router.put("/depot/:id", deleteDepot);
 
 export default router;

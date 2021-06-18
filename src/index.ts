@@ -8,6 +8,7 @@ import swaggerJsDoc from 'swagger-jsdoc'
 import depotRoutes from './routes/depot.routes'
 import categoryRoutes from './routes/category.routes'
 import articleRoutes from './routes/article.routes'
+import invoiceRoutes from './routes/invoice.routes'
 const options = {
     definition: {
       openapi: "3.0.3",
@@ -18,7 +19,7 @@ const options = {
       },
       servers: [
         {
-          url: "http://localhost:4000"
+          url: "http://localhost:5000"
         }
       ]
     },
@@ -45,6 +46,7 @@ app.use(morgan('dev'));
 app.use(depotRoutes);
 app.use(categoryRoutes)
 app.use(articleRoutes)
+app.use(invoiceRoutes)
 
-app.listen(4000);
+app.listen(5000);
 console.log(`Listening on port ${process.env.PORT}`);

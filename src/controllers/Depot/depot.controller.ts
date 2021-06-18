@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import {Depot} from "../../entity/Depot"
+import { Depot } from '../../entity/Depot';
 // 
 export const createDepot = async (
     req: Request,
@@ -8,20 +8,21 @@ export const createDepot = async (
 ) => {
 try {
   const newDepot = getRepository(Depot).create(req.body);
-  const results = await getRepository(Depot).save(newDepot);
+  const results = await getRepository(Depot).save(newDepot );
   return res.json(results);
 } catch (error) {
   console.log(error);
   return res.status(500).json(error);
 }
   };
-  
+  //     return res.
+
   export const getDepots = async (
   _: Request,
     res: Response
   ) => {
   try {
-    const depot = await getRepository(Depot).find();
+    const depot = await getRepository(Depot).find({isDeleted:false});
     return res.status(200).json(depot);
   } catch (error) {
     console.log(error);
@@ -35,7 +36,7 @@ try {
     res: Response
   ) => {
 try {
-  const results = await getRepository(Depot).findOne(req.params.id);
+    const results = await getRepository(Depot).findOne({uuid: req.params.uuid,isDeleted:false});
   return res.status(200).json(results);
 
 } catch (error) {
@@ -51,7 +52,7 @@ try {
     res: Response
   ) => {
 try {
-  const depot = await getRepository(Depot).findOne(req.params.id);
+  const depot = await getRepository(Depot).findOne({ uuid: req.params.uuid });
   if (depot) {
     getRepository(Depot).merge(depot, req.body);
     const results = await getRepository(Depot).save(depot);
@@ -67,8 +68,13 @@ try {
   
   export const deleteDepot = async (req: Request, res: Response) => {
     try {
-      const results = await getRepository(Depot).delete(req.params.id);
-    return res.status(200).json(results);
+        let result = await getRepository(Depot).findOne({ uuid: req.params.uuid });
+        if (result) {
+            result.isDeleted=true;
+            await Depot.save(result);
+        }
+       
+    return res.status(200).json(result);
   
     } catch (error) {
       console.log(error);

@@ -3,7 +3,8 @@ import { Article } from './Article';
 import Model from './Model';
 @Entity('conteneur')
 export class Conteneur extends Model {
-
+    @Column()
+    reference: string;
     @Column()
     prix_achat: number
     @Column()

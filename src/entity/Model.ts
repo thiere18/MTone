@@ -5,6 +5,8 @@ export default abstract class Model extends BaseEntity {
     id: number;
     @Column({ type: 'uuid', })
     uuid: string
+    @Column({ default: false })
+        isDeleted:boolean
     @CreateDateColumn()
     createdAt: Date
     @UpdateDateColumn()

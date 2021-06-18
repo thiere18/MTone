@@ -2,121 +2,120 @@ import { Router } from "express";
 const router = Router();
 
 import {
-  getCategory,
-  getCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory
-} from "../controllers/Category/category.controller";
+  getCapital,
+  getCapitals,
+  createCapital,
+  updateCapital,
+  deleteCapital
+} from "../controllers/Capital/capital.controller";
 
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Category:
+ *     Capital:
  *       type: object
  *       required:
- *         - name
+ *         - montant
  *       properties:
  *         uuid:
  *           type: string
- *           description: The auto-generated uuid of the category
- *         name:
- *           type: string
- *           description: The category name
+ *           description: The auto-generated uuid of the capital
+ *         montant:
+ *           type: number
+ *           description: The capital name
  *       example:
- *         uuid: 4
- *         name: papier
+ *         montant :5000
  */
 
 
 /**
   * @swagger
   * tags:
-  *   name: Category 
-  *   description:  Category managing API
+  *   name: Capital 
+  *   description:  Capital managing API
   */
 
 /**
  * @swagger
- * /category:
+ * /capital:
  *   get:
- *     summary: Returns the list of all Category
- *     tags: [Category]
+ *     summary: Returns the list of all Capital
+ *     tags: [Capital]
  *     responses:
  *       200:
- *         description: The list of all category
+ *         description: The list of all capital
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Category'
+ *                 $ref: '#/components/schemas/Capital'
  */
 
-router.get("/category", getCategories);
+router.get("/capital", getCapital);
 
 /**
  * @swagger
- * /category/{uuid}:
+ * /capital/{uuid}:
  *   get:
- *     summary: Get the category by uuid
- *     tags: [Category]
+ *     summary: Get the capital by uuid
+ *     tags: [Capital]
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         montant: number
  *         schema:
- *           type: string
+ *           type: number
  *         required: true
- *         description: The category uuid
+ *         description: The capital montanat
  *     responses:
  *       200:
- *         description: The category description by uuid
+ *         description: The capital description by uuid
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Category'
+ *               $ref: '#/components/schemas/Capital'
  *       404:
- *         description: The category was not found
+ *         description: The capital was not found
  */
-router.get("/category/:uuid", getCategory);
+router.get("/capital/:uuid", getCapitals); //
 /**
  * @swagger
- * /category:
+ * /capital:
  *   post:
- *     summary: Create a new category
- *     tags: [Category]
+ *     summary: Create a new capital
+ *     tags: [Capital]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Category'
+ *             $ref: '#/components/schemas/Capital'
  *     responses:
  *       200:
- *         description: The Category was successfully created
+ *         description: The Capital was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Category'
+ *               $ref: '#/components/schemas/Capital'
  *       500:
  *         description: Some server error
  */
-router.post("/category", createCategory);
+router.post("/capital", createCapital);
 /**
  * @swagger
  * /categry/{uuid}:
  *  put:
  *    summary: Update the categry by the uuid
- *    tags: [Category]
+ *    tags: [Capital]
  *    parameters:
  *      - in: path
- *        name: uuid
+ *        montant: number
  *        schema: 
- *          type: string
+ *          type: number
  *        required: true
- *        description: The categry uuid
+ *        description: The categry montant
  *    requestBody:
  *      required: true
  *      content:
@@ -135,28 +134,28 @@ router.post("/category", createCategory);
  *      500:
  *        description: Some error happened
  */
-router.put("/category/:uuid", updateCategory);
-
+router.put("/capital/:uuid", updateCapital);
+ 
 /**
  * @swagger
- * /category/{uuid}:
+ * /capital/{uuid}:
  *   delete:
- *     summary: Remove the category by uuid
- *     tags: [Category]
+ *     summary: Remove the capital by uuid
+ *     tags: [Capital]
  *     parameters:
  *       - in: path
  *         name: uuid
  *         schema:
  *           type: string
  *         required: true
- *         description: The category uuid
+ *         description: The capital uuid
  * 
  *     responses:
  *       200:
- *         description: The category was deleted
+ *         description: The capital was deleted
  *       404:
- *         description: The category was not found
+ *         description: The capital was not found
  */
-router.put("/category/:uuid", deleteCategory);
+router.put("/capital/:uuid", deleteCapital);
 
 export default router;

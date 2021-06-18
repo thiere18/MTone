@@ -21,17 +21,17 @@ import {
  *         - name
  *         - prix_achat
  *         - prix_gros
- *         - prix_client 
+ *         - quantity_per_carton 
  *         - frais
  *         - prix_magasin
  *         - quantity_init
  *         - quantity_left
- *         - conteneurId
- *         - categoryId
+ *         - conteneuruuid
+ *         - categoryuuid
  *       properties:
- *         id:
+ *         uuid:
  *           type: string
- *           description: The auto-generated id of the article
+ *           description: The auto-generated uuid of the article
  *         name:             
  *           type: string
  *           description: The article name
@@ -41,23 +41,22 @@ import {
  *         prix_gros: 
  *           type: number
  *           descripton: prix en gros de  l'article
- *         prix_client:
+ *         quantity_per_carton:
  *           type: number
- *           description: prix de vente pour client
+ *           description: quantite de carton
  *         quantity_init:
  *           type: number
  *           description: quantite initiale 
  *         quantity_left:
  *           type: number
  *           description: quantite restante de l'article
- *         conteneurId:
+ *         conteneuruuid:
  *           type: number
- *           description: Id du contenur d'ou il vient
- *         categoryId:
+ *           description: uuid du contenur d'ou il vient
+ *         categoryuuid:
  *           type: number
- *           description: id du article auquel l'article est rattache
+ *           description: uuid du article auquel l'article est rattache
  *       example:
- *         id: 4
  *         name: papier
  *         quantity_init: 234
  *         quantity_left: 23
@@ -67,8 +66,8 @@ import {
  *         prix_gros: 850
  *         prix_revient: 50
  *         prix_magasin: 900
- *         conteneurId: 3
- *         categoryId: 2
+ *         conteneuruuid: 3
+ *         categoryuuid: 2
  * 
  */
 
@@ -101,20 +100,20 @@ router.get("/article", getArticles);
 
 /**
  * @swagger
- * /article/{id}:
+ * /article/{uuid}:
  *   get:
- *     summary: Get the article by id
+ *     summary: Get the article by uuid
  *     tags: [Article]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: uuid
  *         schema:
  *           type: string
  *         required: true
- *         description: The article id
+ *         description: The article uuid
  *     responses:
  *       200:
- *         description: The article description by id
+ *         description: The article description by uuid
  *         contens:
  *           application/json:
  *             schema:
@@ -122,7 +121,7 @@ router.get("/article", getArticles);
  *       404:
  *         description: The article was not found
  */
-router.get("/article/:id", getArticle);
+router.get("/article/:uuid", getArticle);
 /**
  * @swagger
  * /article:
@@ -172,17 +171,17 @@ router.post("/article", createArticle);
 
 /**
  * @swagger
- * /article/{id}:
+ * /article/{uuid}:
  *  put:
- *    summary: Update the article by the id
+ *    summary: Update the article by the uuid
  *    tags: [Article]
  *    parameters:
  *      - in: path
- *        name: id
+ *        name: uuid
  *        schema: 
  *          type: string
  *        required: true
- *        description: The article id
+ *        description: The article uuid
  *    requestBody:
  *      required: true
  *      content:
@@ -201,21 +200,21 @@ router.post("/article", createArticle);
  *      500:
  *        description: Some error happened
  */
-router.put("/article/:id", updateArticle);
+router.put("/article/:uuid", updateArticle);
 
 /**
  * @swagger
- * /article/{id}:
+ * /article/{uuid}:
  *   delete:
- *     summary: Remove the article by id
+ *     summary: Remove the article by uuid
  *     tags: [Article]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: uuid
  *         schema:
  *           type: string
  *         required: true
- *         description: The article id
+ *         description: The article uuid
  * 
  *     responses:
  *       200:
@@ -223,7 +222,7 @@ router.put("/article/:id", updateArticle);
  *       404:
  *         description: The article was not found
  */
-router.delete("/article/:id", deleteArticle);
+router.delete("/article/:uuid", deleteArticle);
 
 
 export default router;
