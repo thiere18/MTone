@@ -10,5 +10,5 @@ import {
 
 router.post('/invoice', createInvoice)
 router.get('/invoice/client/:client_id',getinvoices)
-router.get('//invoice/client/:client_id/:invoice_id',getInvoiceDetails)
+router.get('/invoice/client/:client_id/:invoice_id',getInvoiceDetails)
 export default router;

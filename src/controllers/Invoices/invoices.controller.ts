@@ -16,15 +16,20 @@ export const createInvoice = async (
 try {
   let sql = `INSERT INTO invoices(
     reference,
+    value_net,
+    actual_payment,
+    payment_due,
     clientId,
-    status
   )
   VALUES(
     '${req.body.reference}',
+    '${req.body.total}',
+    '${req.body.avance}',
+    '${req.body.dette}',
     '${req.body.client_id}',
-    0
   )`;
 
+  let updateCapital=` UPDATE magasin SET montant = montant + ${req.body.total} WHERE id =1}`
   db.query(sql, (err, result) => {
     if (err) throw err;
     res.send('invoice created')
@@ -39,16 +44,18 @@ try {
     })
     return res
   }
-  let invoice_id= await last('invoices')
+  let invoice_id= last('invoices')
   
   for (let i = 0; i < req.body.prod_name.length; i++) {
     let query = `INSERT INTO
                   invoice_items(
                     prod_name,
+                    quantity,
                     price,
-                    invoice_id
+                    invoiceId,
                   ) VALUES(
                     '${req.body.prod_name[i]}',
+                    '${req.body.quantity[i]}',
                     '${req.body.price[i]}',
                     '${invoice_id}'
                   )`;
@@ -57,6 +64,12 @@ try {
                     console.log('item added')
                 
                   })
+    let f = ` UPDATE article SET quantity_left = quantity_left + ${req.body.quantity[i]} WHERE designation = ${req.body.prod_name[i]}`
+    db.query(f, (err, result) => {
+      if (err) throw err;
+      console.log('quantity updated')
+    })
+
   }
 
 } catch (error) {
@@ -69,7 +82,7 @@ export const getinvoices = async (
     res: Response
   ) => {
   try {
-    let sql = `SELECT * FROM invoices WHERE user_id='${req.params.client_id}' ORDER BY invoice.id`;
+    let sql = `SELECT * FROM invoices WHERE clientId='${req.params.client_id}' ORDER BY invoice.id`;
     db.query(sql, (err, rows) => {
       if (err) throw err;
       return res.json({

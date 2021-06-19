@@ -14,6 +14,7 @@ try {
   const { reference, prix_transport, local_charge, dechargement, prix_achat, frais_voyage } = req.body
   const sum = await (prix_achat + local_charge + dechargement + prix_transport + frais_voyage);
   
+  
   console.log(sum)
   return res.json(results);
   // const { prix_achat, prix_transport, local_charge, dechargement, frais_voyage } =results.Conteneur;

@@ -6,7 +6,8 @@ import Model from './Model';
 export class Magasin extends Model {
     @Column()
     name: string
- 
+    @Column()
+    montant: number
     // @OneToMany(() => Caisse, caisse => caisse.magasin)
     // caisse: Caisse[];
         
