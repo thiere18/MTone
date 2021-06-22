@@ -2,6 +2,7 @@ import { query, Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Invoices } from '../../entity/Invoices';
 import { InvoiceItems } from "../../entity/InvoiceItems";
+import {Magasin} from "../../entity/Magasin";
 import mysql from 'mysql'
 const db = mysql.createConnection({
   host: 'localhost',
@@ -14,23 +15,30 @@ export const createInvoice = async (
     res: Response
 ) => {
 try {
-  let sql = `INSERT INTO invoices(
-    reference,
-    value_net,
-    actual_payment,
-    payment_due,
-    clientId,
-  )
-  VALUES(
-    '${req.body.reference}',
-    '${req.body.total}',
-    '${req.body.avance}',
-    '${req.body.dette}',
-    '${req.body.client_id}',
-  )`;
+  // let sql = `INSERT INTO invoices(
+  //   reference,
+  //   value_net,
+  //   actual_payment,
+  //   payment_due,
+  //   clientId,
+  // )
+  // VALUES(
+  //   '${req.body.reference}',d
+  //   '${req.body.total}',d
+  //   '${req.body.avance}',
+  //   '${req.body.dette}',
+  //   '${req.body.client_id}',
+  // )`;
+  const newInvoice = getRepository(Invoices).create(req.body);
+  const results = await getRepository(Invoices).save(newInvoice);
 
-  let updateCapital=` UPDATE magasin SET montant = montant + ${req.body.total} WHERE id =1}`
-  db.query(sql, (err, result) => {
+  let updateCapital = ` UPDATE magasin SET montant = montant + ${req.body.total} WHERE id =1}`
+  let result = await getRepository(Magasin).findOne({ id: 1 });
+  if (result) {
+      result.montant=result.montant+req.body.total;
+      await Magasin.save(result);
+  }
+  db.query(updateCapital, (err, result) => {
     if (err) throw err;
     res.send('invoice created')
 
@@ -47,23 +55,16 @@ try {
   let invoice_id= last('invoices')
   
   for (let i = 0; i < req.body.prod_name.length; i++) {
-    let query = `INSERT INTO
-                  invoice_items(
-                    prod_name,
-                    quantity,
-                    price,
-                    invoiceId,
-                  ) VALUES(
-                    '${req.body.prod_name[i]}',
-                    '${req.body.quantity[i]}',
-                    '${req.body.price[i]}',
-                    '${invoice_id}'
-                  )`;
-                  db.query(query, (err, result) => {
-                    if (err) throw err;
-                    console.log('item added')
-                
-                  })
+    let data = {
+      prod_name: req.body.prod_name[i],
+      quantity: req.body.quantity[i],
+      price: req.body.price[i],
+      invoiceId: invoice_id
+      
+    }
+    const items = await getRepository(InvoiceItems).save(data);
+
+
     let f = ` UPDATE article SET quantity_left = quantity_left + ${req.body.quantity[i]} WHERE designation = ${req.body.prod_name[i]}`
     db.query(f, (err, result) => {
       if (err) throw err;
@@ -122,4 +123,21 @@ export const getInvoiceDetails = async (
     return res.status(500).json(error);
 
   }
-  };
+};
+  
+export const deleteInvoice = async (req: Request, res: Response) => {
+  try {
+      let result = await getRepository(Invoices).findOne({ uuid: req.params.uuid });
+      if (result) {
+          result.isDeleted=true;
+          await Invoices.save(result);
+      }
+     
+  return res.status(200).json(result);
+
+  } catch (error) {
+    console.log(error);
+return res.status(500).json(error);
+
+}
+};

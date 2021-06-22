@@ -1,6 +1,5 @@
 import { Column, Entity , ManyToOne,PrimaryGeneratedColumn} from "typeorm";
 import { Invoices } from "./Invoices";
-import Model from "./Model";
  
 @Entity()
 export class InvoiceItems   {
